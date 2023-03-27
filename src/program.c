@@ -1,6 +1,7 @@
 // Program Manager
 // Handles CHIP-8 Logic.
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -22,6 +23,11 @@ typedef struct program_t
 program_t* program_init(char* file)
 {
 	program_t* program = malloc(sizeof(program_t));
+
+	if(program == NULL)
+	{
+		fprintf(stderr, "Program: failed to initialize object\n");
+	}
 
 	program->memory = malloc(sizeof(uint16_t) * 4096);
 }

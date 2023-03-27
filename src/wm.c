@@ -49,11 +49,12 @@ static const struct
 {
 	float x, y;
 	float r, g, b;
-} vertices[3] =
+} vertices[4] =
 {
-	{ -0.6f, -0.4f, 1.f, 0.f, 0.f },
-	{  0.6f, -0.4f, 0.f, 1.f, 0.f },
-	{   0.f,  0.6f, 0.f, 0.f, 1.f }
+	{ -1.f, -1.f, 0.f, 0.f, 0.f }, 
+	{ -1.f, 1.f, 0.f, 0.f, 1.f }, 
+	{ 1.f, -1.f, 1.f, 0.f, 0.f }, 
+	{ 1.f, 1.f, 1.f, 1.f, 1.f },
 };
 
 const struct
@@ -189,20 +190,21 @@ void wm_update(wm_t* wm)
 	glfwGetFramebufferSize(wm->window, &width, &height);
 	ratio = width / (float) height;
 
-	glViewport(0, 0, 640, 480);
+	glViewport(0, 0, width, height);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClearColor(glfwGetTime() / 10, 0.f, 0.f, .5f);
 
 	glm_mat4_identity(m);
 	versor q;
-	glm_quat(q, (float) glfwGetTime(), 0, 0, 90.0f);
-	glm_quat_rotate(m, q, m);
+	//glm_quat(q, (float) glfwGetTime(), 0, 0, 90.0f);
+	//glm_quat_rotate(m, q, m);
 	glm_ortho(-ratio, ratio, -1.0f, 1.0f, 1.0f, -1.0f, p);
 	glm_mat4_mul(m, p, mvp);
 
 	glUseProgram(wm->program);
 	glUniformMatrix4fv(wm->mvp_location, 1, GL_FALSE, (const GLfloat*) mvp);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawArrays(GL_TRIANGLES, 1, 3);
 
 	glfwSwapBuffers(wm->window);
 	glfwPollEvents();
@@ -213,6 +215,13 @@ void wm_update(wm_t* wm)
 		fprintf(stderr, "WM: GL error: %s\n", gluErrorString(err));
 		return;
 	}
+}
+
+// Takes a set of booleans and creates a GL texture from them.
+void wm_get_texture_from_bools(int h, int w, bool** bools)
+{
+	vec3 color1 = {0, 0, 0};
+	vec3 color2 = {1, 1, 1};
 }
 
 // Uninitialize window and free related resources.
