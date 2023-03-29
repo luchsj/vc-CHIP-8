@@ -1,10 +1,13 @@
 #include <stdlib.h>
 
+#include "program.h"
 #include "wm.h"
 
 int main()
 {
 	wm_t* wm = wm_init();
+	program_t* program = program_init(NULL);
+	wm_init_texture(wm, program_display_to_rgb(program), 32, 64);
 
 	if(wm == NULL)
 		return EXIT_FAILURE;

@@ -15,23 +15,28 @@
 
 // Temp shaders
 static const char* vertex_shader_text =
-"#version 110\n"
+"#version 150 core\n"
 "uniform mat4 MVP;\n"
 "attribute vec3 vCol;\n"
 "attribute vec2 vPos;\n"
+"attribute vec2 texcoord;\n"
 "varying vec3 color;\n"
+"varying vec2 TexCoord;\n"
 "void main()\n"
 "{\n"
 "    gl_Position = MVP * vec4(vPos, 0.0, 1.0);\n"
 "    color = vCol;\n"
+"	 TexCoord = texcoord;\n"
 "}\n";
 
 static const char* fragment_shader_text =
-"#version 110\n"
+"#version 150 core\n"
+"uniform sampler2D tex;\n"
+"varying vec2 TexCoord;\n"
 "varying vec3 color;\n"
 "void main()\n"
 "{\n"
-"    gl_FragColor = vec4(color, 1.0);\n"
+"    gl_FragColor = texture(tex, TexCoord);\n"
 "}\n";
 
 // Main window manager object
@@ -41,20 +46,22 @@ typedef struct wm_t
 	uint32_t key_mask;
 
 	GLuint vertex_buffer, vertex_shader, fragment_shader, program;
-	GLint mvp_location, vpos_location, vcol_location;
 
+	// Shader parameters
+	GLint mvp_location, vpos_location, vcol_location, texture;
 } wm_t;
 
 static const struct
 {
 	float x, y;
 	float r, g, b;
+	float s, t;
 } vertices[4] =
 {
-	{ -1.f, -1.f, 0.f, 0.f, 0.f }, 
-	{ -1.f, 1.f, 0.f, 0.f, 1.f }, 
-	{ 1.f, -1.f, 1.f, 0.f, 0.f }, 
-	{ 1.f, 1.f, 1.f, 1.f, 1.f },
+	{ -1.f, -0.5f, 0.f, 0.f, 0.f, 0.f, 1.f}, 
+	{ -1.f, 0.5f, 0.f, 0.f, 1.f , 0.f, 0.f}, 
+	{ 1.f, -0.5f, 1.f, 0.f, 0.f, 1.f, 1.f}, 
+	{ 1.f, 0.5f, 1.f, 1.f, 1.f, 1.f, 0.f},
 };
 
 const struct
@@ -87,6 +94,11 @@ static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	return;
 }
 
+static void error_callback(int error, const char* description)
+{
+	fprintf(stderr, "Error: %s\n", description);
+}
+
 // Handles the initialization of GL-related buffers.
 void init_gl(wm_t* wm)
 {
@@ -109,15 +121,32 @@ void init_gl(wm_t* wm)
 	glAttachShader(wm->program, wm->vertex_shader);
 	glAttachShader(wm->program, wm->fragment_shader);
 	glLinkProgram(wm->program);	
+	glUseProgram(wm->program);
 
+	err = glGetError();
+	if(err != GL_NO_ERROR)
+	{
+		fprintf(stderr, "WM: GL shader init failure: %s\n", gluErrorString(err));
+		return NULL;
+	}
 	wm->mvp_location = glGetUniformLocation(wm->program, "MVP");
 	wm->vpos_location = glGetAttribLocation(wm->program, "vPos");
 	wm->vcol_location = glGetAttribLocation(wm->program, "vCol");
+	wm->texture = glGetAttribLocation(wm->program, "texcoord");
 
 	glEnableVertexAttribArray(wm->vpos_location);
 	glVertexAttribPointer(wm->vpos_location, 2, GL_FLOAT, GL_FALSE, sizeof(vertices[0]), (void*) 0);
 	glEnableVertexAttribArray(wm->vcol_location);
 	glVertexAttribPointer(wm->vcol_location, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]), (void*) (sizeof(float) * 2));
+	glEnableVertexAttribArray(wm->texture);
+	glVertexAttribPointer(wm->texture, 2, GL_FLOAT, GL_FALSE, sizeof(vertices[0]), (void*) (sizeof(float) * 5));
+
+	err = glGetError();
+	if(err != GL_NO_ERROR)
+	{
+		fprintf(stderr, "WM: GL init failure: %s\n", gluErrorString(err));
+		return NULL;
+	}
 }
 
 // Initializes window, GL, UI, input callbacks, etc.
@@ -148,6 +177,7 @@ wm_t* wm_init()
 	}
 
 	glfwMakeContextCurrent(wm->window);
+	glfwSetErrorCallback(error_callback);
 
 	// Initialize GLEW
 	GLenum err = glewInit();
@@ -171,7 +201,14 @@ wm_t* wm_init()
 	glViewport(0, 0, width, height);
 	
 	init_gl(wm);
+	//wm_init_texture(wm, NULL, );
 
+	err = glGetError();
+	if(err != GL_NO_ERROR)
+	{
+		fprintf(stderr, "WM: WM init failure: %s\n", gluErrorString(err));
+		return NULL;
+	}
 	return wm;
 }
 
@@ -192,10 +229,10 @@ void wm_update(wm_t* wm)
 
 	glViewport(0, 0, width, height);
 	glClear(GL_COLOR_BUFFER_BIT);
-	glClearColor(glfwGetTime() / 10, 0.f, 0.f, .5f);
+	glClearColor(0.1, 0.1f, 0.1f, 1.f);
 
 	glm_mat4_identity(m);
-	versor q;
+	//versor q;
 	//glm_quat(q, (float) glfwGetTime(), 0, 0, 90.0f);
 	//glm_quat_rotate(m, q, m);
 	glm_ortho(-ratio, ratio, -1.0f, 1.0f, 1.0f, -1.0f, p);
@@ -203,26 +240,51 @@ void wm_update(wm_t* wm)
 
 	glUseProgram(wm->program);
 	glUniformMatrix4fv(wm->mvp_location, 1, GL_FALSE, (const GLfloat*) mvp);
+	//glDrawElements
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 	glDrawArrays(GL_TRIANGLES, 1, 3);
 
 	glfwSwapBuffers(wm->window);
 	glfwPollEvents();
+}
+
+// Takes a set of floats representing RGB values and creates a GL texture from them.
+// TODO: specification
+void wm_init_texture(wm_t* wm, float* tex_data, int h, int w)
+{
+	// Test: b/w checkerboard
+	float pixels[] =
+	{
+		0.0f, 0.0f, 0.0f,	1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,   0.0f, 0.0f, 0.0f,
+	};
+
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	// Why does the specification specify that "border" has to be 0?
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_FLOAT, tex_data);	
+	glUniform1i(glGetUniformLocation(wm->program, "tex"), 0);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	//*id = texture;
+	glGenerateMipmap(GL_TEXTURE_2D);
 
 	GLenum err = glGetError();
 	if(err != GL_NO_ERROR)
 	{
-		fprintf(stderr, "WM: GL error: %s\n", gluErrorString(err));
-		return;
+		fprintf(stderr, "WM: Texture init failure: %s\n", gluErrorString(err));
+		return NULL;
 	}
 }
 
-// Takes a set of booleans and creates a GL texture from them.
-void wm_get_texture_from_bools(int h, int w, bool** bools)
-{
-	vec3 color1 = {0, 0, 0};
-	vec3 color2 = {1, 1, 1};
-}
+// TODO: function which replaces the texture at an existing ID
 
 // Uninitialize window and free related resources.
 void wm_terminate(wm_t* wm)
