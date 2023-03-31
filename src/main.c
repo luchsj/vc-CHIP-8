@@ -6,7 +6,7 @@
 int main()
 {
 	wm_t* wm = wm_init();
-	program_t* program = program_init(NULL);
+	program_t* program = program_init("roms/ibm-logo.ch8");
 	wm_init_texture(wm, program_display_to_rgb(program), 32, 64);
 
 	if(wm == NULL)
@@ -14,6 +14,8 @@ int main()
 
 	while(!wm_should_close(wm))
 	{
+		program_update(program);
+		wm_init_texture(wm, program_display_to_rgb(program), 32, 64);
 		wm_update(wm);
 	}
 
