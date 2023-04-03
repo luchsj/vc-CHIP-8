@@ -13,7 +13,7 @@
 typedef struct program_t
 {
 	uint8_t* memory;	  // 4kB of memory (all RAM, entire program is loaded in at startup)
-	bool display[64][32]; // 32 x 64 px display ("on/off" values)
+	bool display[32][64]; // 32 x 64 px display ("on/off" values)
 	uint16_t pc;		  // 16-bit program counter
 	uint16_t index;		  // 16-bit register for mem locations	
 	uint16_t* func_stack; // 16-bit function stack
@@ -54,10 +54,16 @@ program_t* program_init(char* file_path)
 
 	program->memory = malloc(sizeof(uint8_t) * 4096);
 
-	for (int i = 0; i < 64; i++)
+	for (int i = 0; i < 32; i++)
 	{
-		for (int j = 0; j < 32; j++)
-			program->display[i][j] = ((i + j) % 2 == 0);
+		for (int j = 0; j < 64; j++)
+		{
+			if (i % 2 == 0)
+				program->display[i][j] = true;
+			else
+				program->display[i][j] = false;
+
+		}
 	}
 
 	memcpy_s(program->memory + 0x050, sizeof(uint8_t) * (4096 - 0x050), font, sizeof(font));
@@ -120,9 +126,9 @@ float* program_display_to_rgb(program_t* program)
 	}
 
 	int pos = 0;
-	for (int i = 0; i < 64; i++)
+	for (int i = 0; i < 32; i++)
 	{
-		for (int j = 0; j < 32; j++)
+		for (int j = 0; j < 64; j++)
 		{
 			if (program->display[i][j])
 			{
@@ -160,9 +166,9 @@ void program_update(program_t* program)
 	case 0x0000:
 		if (instruction == 0x00E0) // Clear screen
 		{
-			for (int i = 0; i < 64; i++)
+			for (int i = 0; i < 32; i++)
 			{
-				for (int j = 0; j < 32; j++)
+				for (int j = 0; j < 64; j++)
 					program->display[i][j] = false;
 			}
 		}
@@ -187,35 +193,35 @@ void program_update(program_t* program)
 		y = ((instruction & 0x00F0) >> 4);
 		n = (instruction & 0x000F);
 
-		uint8_t x_pos = program->vars[x];
+		uint8_t x_pos = program->vars[x] % 64;
 		uint8_t y_pos = program->vars[y] % 32;
 
 		program->vars[0xf] = 0;
 
 		for (int i = 0; i < n; i++)
 		{
-			y_pos = program->vars[y] % 32;
 			for (int j = 0; j < 8; j++)
 			{
 				int mask = 1 << (7 - j);
 				uint8_t val = (*(program->memory + program->index + i) & mask) >> (7 - j);
-				if (val && x_pos < 64 && y_pos < 32)
+				if (val && y_pos + i < 32 && x_pos + j < 64)
 				{
-					if (program->display[x_pos][y_pos])
+					if (program->display[y_pos + i][x_pos + j])
 					{
-						program->display[x_pos][y_pos] = false;
+						program->display[y_pos + i][x_pos + j] = false;
 						program->vars[0xF] = 1;
 					}
 					else
 					{
-						program->display[x_pos][y_pos] = true;
+						program->display[y_pos + i][x_pos + j] = true;
 					}
 				}
 
-				if (++y_pos >= 32)
+				if (x_pos + j >= 64)
 					break;
 			}
-			if (++x_pos >= 64)
+
+			if (y_pos + i >= 32)
 				break;
 		}
 
