@@ -157,72 +157,72 @@ void program_update(program_t* program)
 	// Decode / Execute
 	switch (instruction & 0xF000)
 	{
-		case 0x0000:
-			if (instruction == 0x00E0) // Clear screen;
+	case 0x0000:
+		if (instruction == 0x00E0) // Clear screen
+		{
+			for (int i = 0; i < 64; i++)
 			{
-				for (int i = 0; i < 64; i++)
-				{
-					for (int j = 0; j < 32; j++)
-					{
-						program->display[i][j] = false;
-					}
-				}
+				for (int j = 0; j < 32; j++)
+					program->display[i][j] = false;
 			}
-			break;
-		case 0x1000: // 1NNN - jump to 0xNNN
-			program->pc = 0x0000 | (instruction ^ 0x1000);
-			break;
-		case 0x6000: // 6XNN - set register VX to NN
-			program->vars[(instruction ^ 0x6000) >> 8] = (uint8_t) instruction ;
-			break;
-		case 0x7000: // 7XNN - add NN to register VX
-			program->vars[(instruction ^ 0x7000) >> 8] += (uint8_t) instruction;
-			break;
-		case 0xA000: // ANNN - set index register to NNN
-			program->index = instruction ^ 0xA000;
-			break;
-		case 0xD000: // DXYN - display
+		}
+		break;
+	case 0x1000: // 1NNN - jump to 0xNNN
+		program->pc = instruction ^ 0x1000;
+		break;
+	case 0x6000: // 6XNN - set register VX to NN
+		program->vars[(instruction ^ 0x6000) >> 8] = (uint8_t)instruction;
+		break;
+	case 0x7000: // 7XNN - add NN to register VX
+		program->vars[(instruction ^ 0x7000) >> 8] += (uint8_t)instruction;
+		break;
+	case 0xA000: // ANNN - set index register to NNN
+		program->index = instruction ^ 0xA000;
+		break;
+	case 0xD000: // DXYN - display
+	{
+		// Treating lower-left as origin
+		uint8_t x, y, n;
+		x = ((instruction & 0x0F00) >> 8);
+		y = ((instruction & 0x00F0) >> 4);
+		n = (instruction & 0x000F);
+
+		uint8_t x_pos = program->vars[x];
+		uint8_t y_pos = program->vars[y] % 32;
+
+		program->vars[0xf] = 0;
+
+		for (int i = 0; i < n; i++)
+		{
+			y_pos = program->vars[y] % 32;
+			for (int j = 0; j < 8; j++)
 			{
-				uint8_t x, y, n;
-				x = ((instruction & 0x0F00) >> 8);
-				y = ((instruction & 0x00F0) >> 4);
-				n = (instruction & 0x000F);
-
-				uint8_t x_pos = program->vars[x] % 64;
-				uint8_t y_pos = program->vars[y] % 32;
-
-				program->vars[15] = 0;
-
-				for (int i = 0; i < n; i++)
+				int mask = 1 << (7 - j);
+				uint8_t val = (*(program->memory + program->index + i) & mask) >> (7 - j);
+				if (val && x_pos < 64 && y_pos < 32)
 				{
-					x_pos = program->vars[x];
-					for (int j = 0; j < 8; j++)
+					if (program->display[x_pos][y_pos])
 					{
-						int mask = 1 << (7 - j);
-						uint8_t val = (*(program->memory + program->index + i) & mask) >> (7 - j);
-						if (val && x_pos < 64 && y_pos < 32)
-						{ 
-							if (program->display[63 - x_pos][y_pos])
-							{
-								program->display[63 - x_pos][y_pos] = false;
-								program->vars[15] = 1;
-							}
-							else
-							{
-								program->display[63 - x_pos][y_pos] = true;
-							}
-						}
-						if (++x_pos >= 64)
-							break;
+						program->display[x_pos][y_pos] = false;
+						program->vars[0xF] = 1;
 					}
-					if (++y_pos >= 32)
-						break;
+					else
+					{
+						program->display[x_pos][y_pos] = true;
+					}
 				}
 
+				if (++y_pos >= 32)
+					break;
+			}
+			if (++x_pos >= 64)
 				break;
-			}
-		default:
-			fprintf(stderr, "Program: encountered unknown instruction\n");
-			break;
+		}
+
+		break;
+	}
+	default:
+		fprintf(stderr, "Program: encountered unknown instruction\n");
+		break;
 	}
 }
