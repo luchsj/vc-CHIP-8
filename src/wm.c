@@ -5,8 +5,8 @@
 #include "wm.h"
 
 // GL
-#include "GL/glew.h"
-#define GLEW_STATIC // Required for Windows executable
+//#define GLEW_STATIC // Required for Windows executable
+#include <GL/glew.h>
 
 #include "cglm/cam.h"
 #include "cglm/mat4.h"

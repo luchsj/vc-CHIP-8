@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\hicts\Documents\code\vc-CHIP-8\include;C:\Users\hicts\Documents\code\vc-CHIP-8\include;C:\Users\hicts\Documents\code\vc-CHIP-8\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\hicts\Documents\code\vc-CHIP-8\lib;C:\Users\hicts\Documents\code\vc-CHIP-8\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>include;$(IncludePath)</IncludePath>
+    <LibraryPath>lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\Users\hicts\Documents\code\vc-CHIP-8\include;C:\Users\hicts\Documents\code\vc-CHIP-8\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
@@ -124,7 +124,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\hicts\Documents\code\vc-CHIP-8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
