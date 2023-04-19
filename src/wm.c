@@ -87,6 +87,42 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 	}
 }
 
+static void render_error_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* user_param)
+{
+	GLenum severity_selection = GL_DEBUG_SEVERITY_HIGH | GL_DEBUG_SEVERITY_MEDIUM;
+
+	if ((severity & severity_selection) == 0)
+		return;
+
+	char* src;
+
+	switch (source)
+	{
+		case GL_DEBUG_SOURCE_API:
+			src = "API";
+			break;
+		case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
+			src = "Window System";
+			break;
+		case GL_DEBUG_SOURCE_SHADER_COMPILER:
+			src = "Shader Compiler";
+			break;
+		case GL_DEBUG_SOURCE_THIRD_PARTY:
+			src = "Third-party App";
+			break;
+		case GL_DEBUG_SOURCE_APPLICATION:
+			src = "User-generated";
+		case GL_DEBUG_SOURCE_OTHER:
+			src = "Other";
+			break;
+		default:
+			src = "Unknown";
+			break;
+	}
+
+	fprintf(stderr, "GL err: src: %s, msg: %s\n", src, message);
+}
+
 // TODO: Report size change on callback
 static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -94,9 +130,9 @@ static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	return;
 }
 
-static void error_callback(int error, const char* description)
+static void glfw_error_callback(int error, const char* description)
 {
-	fprintf(stderr, "Error: %s\n", description);
+	fprintf(stderr, "GLFW error: %s\n", description);
 }
 
 // Handles the initialization of GL-related buffers.
@@ -105,8 +141,12 @@ void init_gl(wm_t* wm)
 	// Just need to create a quad that fills the screen.
 	GLenum err;
 
+	// Enable debug messages
+	glEnable(GL_DEBUG_OUTPUT);
+	glDebugMessageCallback(render_error_callback, NULL);
+
 	glGenBuffers(1, &wm->vertex_buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, &wm->vertex_buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, wm->vertex_buffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	wm->vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -127,7 +167,7 @@ void init_gl(wm_t* wm)
 	if(err != GL_NO_ERROR)
 	{
 		fprintf(stderr, "WM: GL shader init failure: %s\n", gluErrorString(err));
-		return NULL;
+		return;
 	}
 	wm->mvp_location = glGetUniformLocation(wm->program, "MVP");
 	wm->vpos_location = glGetAttribLocation(wm->program, "vPos");
@@ -145,7 +185,7 @@ void init_gl(wm_t* wm)
 	if(err != GL_NO_ERROR)
 	{
 		fprintf(stderr, "WM: GL init failure: %s\n", gluErrorString(err));
-		return NULL;
+		return;
 	}
 }
 
@@ -177,7 +217,7 @@ wm_t* wm_init()
 	}
 
 	glfwMakeContextCurrent(wm->window);
-	glfwSetErrorCallback(error_callback);
+	glfwSetErrorCallback(glfw_error_callback);
 
 	// Initialize GLEW
 	GLenum err = glewInit();
@@ -203,12 +243,6 @@ wm_t* wm_init()
 	init_gl(wm);
 	//wm_init_texture(wm, NULL, );
 
-	err = glGetError();
-	if(err != GL_NO_ERROR)
-	{
-		fprintf(stderr, "WM: WM init failure: %s\n", gluErrorString(err));
-		return NULL;
-	}
 	return wm;
 }
 
@@ -229,7 +263,7 @@ void wm_update(wm_t* wm)
 
 	glViewport(0, 0, width, height);
 	glClear(GL_COLOR_BUFFER_BIT);
-	glClearColor(0.1, 0.1f, 0.1f, 1.f);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.f);
 
 	glm_mat4_identity(m);
 	//versor q;
@@ -280,7 +314,7 @@ void wm_init_texture(wm_t* wm, float* tex_data, int h, int w)
 	if(err != GL_NO_ERROR)
 	{
 		fprintf(stderr, "WM: Texture init failure: %s\n", gluErrorString(err));
-		return NULL;
+		return;
 	}
 }
 
