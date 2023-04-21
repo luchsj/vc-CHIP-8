@@ -139,16 +139,17 @@ static void glfw_error_callback(int error, const char* description)
 void init_gl(wm_t* wm)
 {
 	// Just need to create a quad that fills the screen.
-	GLenum err;
 
 	// Enable debug messages
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback(render_error_callback, NULL);
-
+	
+	// Generate vertex buffers
 	glGenBuffers(1, &wm->vertex_buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, wm->vertex_buffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+	// Compile shaders
 	wm->vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(wm->vertex_shader, 1, &vertex_shader_text, NULL);
 	glCompileShader(wm->vertex_shader);
@@ -157,18 +158,50 @@ void init_gl(wm_t* wm)
 	glShaderSource(wm->fragment_shader, 1, &fragment_shader_text, NULL);
 	glCompileShader(wm->fragment_shader);
 
+	GLint vert_success, frag_success;
+	glGetShaderiv(wm->vertex_shader, GL_COMPILE_STATUS, &vert_success);
+	glGetShaderiv(wm->fragment_shader, GL_COMPILE_STATUS, &frag_success);
+
+	if (vert_success == GL_FALSE)
+	{
+		GLint log_length = 0;
+		glGetShaderiv(wm->vertex_shader, GL_INFO_LOG_LENGTH, &log_length);
+
+		char* msg = "Vertex shader failed to compile:\n";
+		glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION, GL_DEBUG_TYPE_ERROR, 0, GL_DEBUG_SEVERITY_HIGH, sizeof(msg), msg);
+		
+		GLchar* error_log = malloc(log_length);
+		glGetShaderInfoLog(wm->vertex_shader, log_length, NULL, error_log);
+
+		glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION, GL_DEBUG_TYPE_ERROR, 0, GL_DEBUG_SEVERITY_HIGH, log_length, msg);
+
+		glDeleteShader(wm->vertex_shader);
+		return;
+	}
+
+	if (frag_success == GL_FALSE)
+	{
+		GLint log_length = 0;
+		glGetShaderiv(wm->fragment_shader, GL_INFO_LOG_LENGTH, &log_length);
+
+		char* msg = "Fragment shader failed to compile:\n";
+		glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION, GL_DEBUG_TYPE_ERROR, 0, GL_DEBUG_SEVERITY_HIGH, sizeof(msg), msg);
+		
+		GLchar* error_log = malloc(log_length);
+		glGetShaderInfoLog(wm->fragment_shader, log_length, NULL, error_log);
+
+		glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION, GL_DEBUG_TYPE_ERROR, 0, GL_DEBUG_SEVERITY_HIGH, log_length, msg);
+
+		glDeleteShader(wm->fragment_shader);
+		return;
+	}
+
 	wm->program = glCreateProgram();
 	glAttachShader(wm->program, wm->vertex_shader);
 	glAttachShader(wm->program, wm->fragment_shader);
 	glLinkProgram(wm->program);	
 	glUseProgram(wm->program);
 
-	err = glGetError();
-	if(err != GL_NO_ERROR)
-	{
-		fprintf(stderr, "WM: GL shader init failure: %s\n", gluErrorString(err));
-		return;
-	}
 	wm->mvp_location = glGetUniformLocation(wm->program, "MVP");
 	wm->vpos_location = glGetAttribLocation(wm->program, "vPos");
 	wm->vcol_location = glGetAttribLocation(wm->program, "vCol");
@@ -180,13 +213,6 @@ void init_gl(wm_t* wm)
 	glVertexAttribPointer(wm->vcol_location, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]), (void*) (sizeof(float) * 2));
 	glEnableVertexAttribArray(wm->texture);
 	glVertexAttribPointer(wm->texture, 2, GL_FLOAT, GL_FALSE, sizeof(vertices[0]), (void*) (sizeof(float) * 5));
-
-	err = glGetError();
-	if(err != GL_NO_ERROR)
-	{
-		fprintf(stderr, "WM: GL init failure: %s\n", gluErrorString(err));
-		return;
-	}
 }
 
 // Initializes window, GL, UI, input callbacks, etc.
@@ -294,7 +320,7 @@ void wm_init_texture(wm_t* wm, float* tex_data, int h, int w)
 	};
 
 	GLuint texture;
-	glGenTextures(1, &texture);
+	glGenTextures(1, &texture); // invalid value occurring here - possibly shader compilation issue
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
