@@ -15,6 +15,7 @@ int main()
 	while(!wm_should_close(wm))
 	{
 		program_update(program);
+		//Making a new texture each frame sucks!!! We should be reassigning it!!!
 		wm_init_texture(wm, program_display_to_rgb(program), 32, 64);
 		wm_update(wm);
 	}

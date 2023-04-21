@@ -142,6 +142,7 @@ void init_gl(wm_t* wm)
 
 	// Enable debug messages
 	glEnable(GL_DEBUG_OUTPUT);
+	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 	glDebugMessageCallback(render_error_callback, NULL);
 	
 	// Generate vertex buffers
@@ -176,6 +177,7 @@ void init_gl(wm_t* wm)
 		glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION, GL_DEBUG_TYPE_ERROR, 0, GL_DEBUG_SEVERITY_HIGH, log_length, msg);
 
 		glDeleteShader(wm->vertex_shader);
+		wm->vertex_shader = 0;
 		return;
 	}
 
@@ -193,6 +195,7 @@ void init_gl(wm_t* wm)
 		glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION, GL_DEBUG_TYPE_ERROR, 0, GL_DEBUG_SEVERITY_HIGH, log_length, msg);
 
 		glDeleteShader(wm->fragment_shader);
+		wm->fragment_shader = 0;
 		return;
 	}
 
@@ -200,10 +203,31 @@ void init_gl(wm_t* wm)
 	glAttachShader(wm->program, wm->vertex_shader);
 	glAttachShader(wm->program, wm->fragment_shader);
 	glLinkProgram(wm->program);	
+
+	GLint linked = 0;
+	glGetProgramiv(wm->program, GL_LINK_STATUS, &linked);
+	if (linked == GL_FALSE)
+	{
+		GLint log_length = 0;
+		glGetProgramiv(wm->program, GL_INFO_LOG_LENGTH, &log_length);
+
+		char* msg = "Program link failed:\n";
+		glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION, GL_DEBUG_TYPE_ERROR, 0, GL_DEBUG_SEVERITY_HIGH, sizeof(msg), msg);
+		
+		GLchar* error_log = malloc(log_length);
+		glGetProgramInfoLog(wm->program, log_length, NULL, error_log);
+
+		glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION, GL_DEBUG_TYPE_ERROR, 0, GL_DEBUG_SEVERITY_HIGH, log_length, msg);
+
+		glDeleteProgram(wm->program);
+		wm->program = 0;
+		return;
+	}
+
 	glUseProgram(wm->program);
 
 	wm->mvp_location = glGetUniformLocation(wm->program, "MVP");
-	wm->vpos_location = glGetAttribLocation(wm->program, "vPos");
+	wm->vpos_location = glGetAttribLocation(wm->program, "vPos"); //Retuning invalid values for this + two below
 	wm->vcol_location = glGetAttribLocation(wm->program, "vCol");
 	wm->texture = glGetAttribLocation(wm->program, "texcoord");
 
@@ -319,12 +343,12 @@ void wm_init_texture(wm_t* wm, float* tex_data, int h, int w)
 		1.0f, 1.0f, 1.0f,   0.0f, 0.0f, 0.0f,
 	};
 
-	GLuint texture;
-	glGenTextures(1, &texture); // invalid value occurring here - possibly shader compilation issue
+	GLuint texture = 0;
+	glGenTextures(1, &texture); 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	// Why does the specification specify that "border" has to be 0?
+	// Why does the specification say that "border" has to be 0?
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_FLOAT, tex_data);	
 	glUniform1i(glGetUniformLocation(wm->program, "tex"), 0);
 
