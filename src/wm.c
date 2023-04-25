@@ -5,8 +5,8 @@
 #include "wm.h"
 
 // GL
-#include "GL/glew.h"
-#define GLEW_STATIC // Required for Windows executable
+//#define GLEW_STATIC // Required for Windows executable
+#include <GL/glew.h>
 
 #include "cglm/cam.h"
 #include "cglm/mat4.h"
@@ -310,6 +310,7 @@ void wm_update(wm_t* wm)
 
 // Takes a set of floats representing RGB values and creates a GL texture from them.
 // TODO: specification
+// TODO: Another function which *updates* an existing texture instead of reinitializing a new one at the same position
 void wm_init_texture(wm_t* wm, float* tex_data, int h, int w)
 {
 	// Test: b/w checkerboard

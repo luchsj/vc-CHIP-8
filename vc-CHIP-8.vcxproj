@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{2c43fdfb-ff51-41cd-908b-a3e9c3ab47f6}</ProjectGuid>
+    <RootNamespace>vcCHIP8</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>include;$(IncludePath)</IncludePath>
+    <LibraryPath>lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\Users\hicts\Documents\code\vc-CHIP-8\include;C:\Users\hicts\Documents\code\vc-CHIP-8\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>C:\Users\hicts\Documents\code\vc-CHIP-8\lib;C:\Users\hicts\Documents\code\vc-CHIP-8\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>C:\Users\hicts\Documents\code\vc-CHIP-8\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>C:\Users\hicts\Documents\code\vc-CHIP-8\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>C:\Users\hicts\Documents\code\vc-CHIP-8\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>C:\Users\hicts\Documents\code\vc-CHIP-8\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\hicts\Documents\code\vc-CHIP-8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;glew32.lib;glu32.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\hicts\Documents\code\vc-CHIP-8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;glew32.lib;glu32.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;glew32.lib;glu32.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\hicts\Documents\code\vc-CHIP-8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;glew32.lib;glu32.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.c" />
+    <ClCompile Include="src\program.c" />
+    <ClCompile Include="src\wm.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\cglm\affine-mat.h" />
+    <ClInclude Include="include\cglm\affine-post.h" />
+    <ClInclude Include="include\cglm\affine-pre.h" />
+    <ClInclude Include="include\cglm\affine.h" />
+    <ClInclude Include="include\cglm\affine2d.h" />
+    <ClInclude Include="include\cglm\applesimd.h" />
+    <ClInclude Include="include\cglm\bezier.h" />
+    <ClInclude Include="include\cglm\box.h" />
+    <ClInclude Include="include\cglm\call.h" />
+    <ClInclude Include="include\cglm\call\affine.h" />
+    <ClInclude Include="include\cglm\call\affine2d.h" />
+    <ClInclude Include="include\cglm\call\bezier.h" />
+    <ClInclude Include="include\cglm\call\box.h" />
+    <ClInclude Include="include\cglm\call\cam.h" />
+    <ClInclude Include="include\cglm\call\clipspace\ortho_lh_no.h" />
+    <ClInclude Include="include\cglm\call\clipspace\ortho_lh_zo.h" />
+    <ClInclude Include="include\cglm\call\clipspace\ortho_rh_no.h" />
+    <ClInclude Include="include\cglm\call\clipspace\ortho_rh_zo.h" />
+    <ClInclude Include="include\cglm\call\clipspace\persp_lh_no.h" />
+    <ClInclude Include="include\cglm\call\clipspace\persp_lh_zo.h" />
+    <ClInclude Include="include\cglm\call\clipspace\persp_rh_no.h" />
+    <ClInclude Include="include\cglm\call\clipspace\persp_rh_zo.h" />
+    <ClInclude Include="include\cglm\call\clipspace\project_no.h" />
+    <ClInclude Include="include\cglm\call\clipspace\project_zo.h" />
+    <ClInclude Include="include\cglm\call\clipspace\view_lh_no.h" />
+    <ClInclude Include="include\cglm\call\clipspace\view_lh_zo.h" />
+    <ClInclude Include="include\cglm\call\clipspace\view_rh_no.h" />
+    <ClInclude Include="include\cglm\call\clipspace\view_rh_zo.h" />
+    <ClInclude Include="include\cglm\call\curve.h" />
+    <ClInclude Include="include\cglm\call\ease.h" />
+    <ClInclude Include="include\cglm\call\euler.h" />
+    <ClInclude Include="include\cglm\call\frustum.h" />
+    <ClInclude Include="include\cglm\call\io.h" />
+    <ClInclude Include="include\cglm\call\ivec2.h" />
+    <ClInclude Include="include\cglm\call\ivec3.h" />
+    <ClInclude Include="include\cglm\call\ivec4.h" />
+    <ClInclude Include="include\cglm\call\mat2.h" />
+    <ClInclude Include="include\cglm\call\mat3.h" />
+    <ClInclude Include="include\cglm\call\mat4.h" />
+    <ClInclude Include="include\cglm\call\plane.h" />
+    <ClInclude Include="include\cglm\call\project.h" />
+    <ClInclude Include="include\cglm\call\quat.h" />
+    <ClInclude Include="include\cglm\call\ray.h" />
+    <ClInclude Include="include\cglm\call\sphere.h" />
+    <ClInclude Include="include\cglm\call\vec2.h" />
+    <ClInclude Include="include\cglm\call\vec3.h" />
+    <ClInclude Include="include\cglm\call\vec4.h" />
+    <ClInclude Include="include\cglm\cam.h" />
+    <ClInclude Include="include\cglm\cglm.h" />
+    <ClInclude Include="include\cglm\clipspace\ortho_lh_no.h" />
+    <ClInclude Include="include\cglm\clipspace\ortho_lh_zo.h" />
+    <ClInclude Include="include\cglm\clipspace\ortho_rh_no.h" />
+    <ClInclude Include="include\cglm\clipspace\ortho_rh_zo.h" />
+    <ClInclude Include="include\cglm\clipspace\persp.h" />
+    <ClInclude Include="include\cglm\clipspace\persp_lh_no.h" />
+    <ClInclude Include="include\cglm\clipspace\persp_lh_zo.h" />
+    <ClInclude Include="include\cglm\clipspace\persp_rh_no.h" />
+    <ClInclude Include="include\cglm\clipspace\persp_rh_zo.h" />
+    <ClInclude Include="include\cglm\clipspace\project_no.h" />
+    <ClInclude Include="include\cglm\clipspace\project_zo.h" />
+    <ClInclude Include="include\cglm\clipspace\view_lh.h" />
+    <ClInclude Include="include\cglm\clipspace\view_lh_no.h" />
+    <ClInclude Include="include\cglm\clipspace\view_lh_zo.h" />
+    <ClInclude Include="include\cglm\clipspace\view_rh.h" />
+    <ClInclude Include="include\cglm\clipspace\view_rh_no.h" />
+    <ClInclude Include="include\cglm\clipspace\view_rh_zo.h" />
+    <ClInclude Include="include\cglm\color.h" />
+    <ClInclude Include="include\cglm\common.h" />
+    <ClInclude Include="include\cglm\curve.h" />
+    <ClInclude Include="include\cglm\ease.h" />
+    <ClInclude Include="include\cglm\euler.h" />
+    <ClInclude Include="include\cglm\frustum.h" />
+    <ClInclude Include="include\cglm\io.h" />
+    <ClInclude Include="include\cglm\ivec2.h" />
+    <ClInclude Include="include\cglm\ivec3.h" />
+    <ClInclude Include="include\cglm\ivec4.h" />
+    <ClInclude Include="include\cglm\mat2.h" />
+    <ClInclude Include="include\cglm\mat3.h" />
+    <ClInclude Include="include\cglm\mat4.h" />
+    <ClInclude Include="include\cglm\plane.h" />
+    <ClInclude Include="include\cglm\project.h" />
+    <ClInclude Include="include\cglm\quat.h" />
+    <ClInclude Include="include\cglm\ray.h" />
+    <ClInclude Include="include\cglm\simd\arm.h" />
+    <ClInclude Include="include\cglm\simd\avx\affine.h" />
+    <ClInclude Include="include\cglm\simd\avx\mat4.h" />
+    <ClInclude Include="include\cglm\simd\intrin.h" />
+    <ClInclude Include="include\cglm\simd\neon\affine.h" />
+    <ClInclude Include="include\cglm\simd\neon\mat2.h" />
+    <ClInclude Include="include\cglm\simd\neon\mat4.h" />
+    <ClInclude Include="include\cglm\simd\neon\quat.h" />
+    <ClInclude Include="include\cglm\simd\sse2\affine.h" />
+    <ClInclude Include="include\cglm\simd\sse2\mat2.h" />
+    <ClInclude Include="include\cglm\simd\sse2\mat3.h" />
+    <ClInclude Include="include\cglm\simd\sse2\mat4.h" />
+    <ClInclude Include="include\cglm\simd\sse2\quat.h" />
+    <ClInclude Include="include\cglm\simd\x86.h" />
+    <ClInclude Include="include\cglm\sphere.h" />
+    <ClInclude Include="include\cglm\struct.h" />
+    <ClInclude Include="include\cglm\struct\affine-post.h" />
+    <ClInclude Include="include\cglm\struct\affine-pre.h" />
+    <ClInclude Include="include\cglm\struct\affine.h" />
+    <ClInclude Include="include\cglm\struct\affine2d.h" />
+    <ClInclude Include="include\cglm\struct\box.h" />
+    <ClInclude Include="include\cglm\struct\cam.h" />
+    <ClInclude Include="include\cglm\struct\clipspace\ortho_lh_no.h" />
+    <ClInclude Include="include\cglm\struct\clipspace\ortho_lh_zo.h" />
+    <ClInclude Include="include\cglm\struct\clipspace\ortho_rh_no.h" />
+    <ClInclude Include="include\cglm\struct\clipspace\ortho_rh_zo.h" />
+    <ClInclude Include="include\cglm\struct\clipspace\persp_lh_no.h" />
+    <ClInclude Include="include\cglm\struct\clipspace\persp_lh_zo.h" />
+    <ClInclude Include="include\cglm\struct\clipspace\persp_rh_no.h" />
+    <ClInclude Include="include\cglm\struct\clipspace\persp_rh_zo.h" />
+    <ClInclude Include="include\cglm\struct\clipspace\project_no.h" />
+    <ClInclude Include="include\cglm\struct\clipspace\project_zo.h" />
+    <ClInclude Include="include\cglm\struct\clipspace\view_lh_no.h" />
+    <ClInclude Include="include\cglm\struct\clipspace\view_lh_zo.h" />
+    <ClInclude Include="include\cglm\struct\clipspace\view_rh_no.h" />
+    <ClInclude Include="include\cglm\struct\clipspace\view_rh_zo.h" />
+    <ClInclude Include="include\cglm\struct\color.h" />
+    <ClInclude Include="include\cglm\struct\curve.h" />
+    <ClInclude Include="include\cglm\struct\euler.h" />
+    <ClInclude Include="include\cglm\struct\frustum.h" />
+    <ClInclude Include="include\cglm\struct\io.h" />
+    <ClInclude Include="include\cglm\struct\mat2.h" />
+    <ClInclude Include="include\cglm\struct\mat3.h" />
+    <ClInclude Include="include\cglm\struct\mat4.h" />
+    <ClInclude Include="include\cglm\struct\plane.h" />
+    <ClInclude Include="include\cglm\struct\project.h" />
+    <ClInclude Include="include\cglm\struct\quat.h" />
+    <ClInclude Include="include\cglm\struct\sphere.h" />
+    <ClInclude Include="include\cglm\struct\vec2-ext.h" />
+    <ClInclude Include="include\cglm\struct\vec2.h" />
+    <ClInclude Include="include\cglm\struct\vec3-ext.h" />
+    <ClInclude Include="include\cglm\struct\vec3.h" />
+    <ClInclude Include="include\cglm\struct\vec4-ext.h" />
+    <ClInclude Include="include\cglm\struct\vec4.h" />
+    <ClInclude Include="include\cglm\types-struct.h" />
+    <ClInclude Include="include\cglm\types.h" />
+    <ClInclude Include="include\cglm\util.h" />
+    <ClInclude Include="include\cglm\vec2-ext.h" />
+    <ClInclude Include="include\cglm\vec2.h" />
+    <ClInclude Include="include\cglm\vec3-ext.h" />
+    <ClInclude Include="include\cglm\vec3.h" />
+    <ClInclude Include="include\cglm\vec4-ext.h" />
+    <ClInclude Include="include\cglm\vec4.h" />
+    <ClInclude Include="include\cglm\version.h" />
+    <ClInclude Include="include\GLFW\glfw3.h" />
+    <ClInclude Include="include\GLFW\glfw3native.h" />
+    <ClInclude Include="include\GL\eglew.h" />
+    <ClInclude Include="include\GL\glew.h" />
+    <ClInclude Include="include\GL\glxew.h" />
+    <ClInclude Include="include\GL\wglew.h" />
+    <ClInclude Include="src\program.h" />
+    <ClInclude Include="src\wm.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="x64\Debug\ibm-logo.ch8" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
