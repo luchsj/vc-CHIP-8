@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\main.c" />
     <ClCompile Include="src\program.c" />
     <ClCompile Include="src\wm.c" />
@@ -303,6 +304,7 @@
     <ClInclude Include="include\cglm\vec4-ext.h" />
     <ClInclude Include="include\cglm\vec4.h" />
     <ClInclude Include="include\cglm\version.h" />
+    <ClInclude Include="include\glad\glad.h" />
     <ClInclude Include="include\GLFW\glfw3.h" />
     <ClInclude Include="include\GLFW\glfw3native.h" />
     <ClInclude Include="include\GL\eglew.h" />
@@ -311,9 +313,6 @@
     <ClInclude Include="include\GL\wglew.h" />
     <ClInclude Include="src\program.h" />
     <ClInclude Include="src\wm.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="x64\Debug\ibm-logo.ch8" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

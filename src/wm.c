@@ -6,7 +6,8 @@
 
 // GL
 //#define GLEW_STATIC // Required for Windows executable
-#include <GL/glew.h>
+//#include <GL/glew.h>
+#include <glad/glad.h>
 
 #include "cglm/cam.h"
 #include "cglm/mat4.h"
@@ -243,15 +244,18 @@ wm_t* wm_init()
 	}
 
 	glfwMakeContextCurrent(wm->window);
+	gladLoadGL();
 	glfwSetErrorCallback(glfw_error_callback);
 
 	// Initialize GLEW
+	/*
 	GLenum err = glewInit();
 	if(err != GLEW_OK)
 	{
 		fprintf(stderr, "WM: GLEW init failure: %s\n", glewGetErrorString(err));
 		return NULL;
 	}
+	*/
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 

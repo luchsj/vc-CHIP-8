@@ -24,6 +24,9 @@
     <ClCompile Include="src\program.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\wm.h">
@@ -491,10 +494,8 @@
     <ClInclude Include="src\program.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="x64\Debug\ibm-logo.ch8">
-      <Filter>Source Files</Filter>
-    </None>
+    <ClInclude Include="include\glad\glad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
