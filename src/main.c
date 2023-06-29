@@ -6,7 +6,7 @@
 int main()
 {
 	wm_t* wm = wm_init();
-	program_t* program = program_init("roms/ibm-logo.ch8");
+	program_t* program = program_init("../roms/chip8-test-suite/1-chip8-logo.ch8");
 	wm_init_texture(wm, program_display_to_rgb(program), 32, 64);
 
 	if(wm == NULL)
