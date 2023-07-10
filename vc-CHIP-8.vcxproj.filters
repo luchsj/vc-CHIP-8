@@ -32,16 +32,7 @@
     <ClInclude Include="src\wm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\GL\eglew.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\GL\glew.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\GL\glxew.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\GL\wglew.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="include\GLFW\glfw3.h">
@@ -492,9 +483,6 @@
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="src\program.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\glad\glad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
