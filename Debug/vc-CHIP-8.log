@@ -1,0 +1,18 @@
+﻿wm.obj : error LNK2019: unresolved external symbol _glfwInit referenced in function _wm_init
+wm.obj : error LNK2019: unresolved external symbol _glfwTerminate referenced in function _wm_init
+wm.obj : error LNK2019: unresolved external symbol _glfwSetErrorCallback referenced in function _wm_init
+wm.obj : error LNK2019: unresolved external symbol _glfwWindowHint referenced in function _wm_init
+wm.obj : error LNK2019: unresolved external symbol _glfwCreateWindow referenced in function _wm_init
+wm.obj : error LNK2019: unresolved external symbol _glfwDestroyWindow referenced in function _wm_terminate
+wm.obj : error LNK2019: unresolved external symbol _glfwWindowShouldClose referenced in function _wm_should_close
+wm.obj : error LNK2019: unresolved external symbol _glfwSetWindowShouldClose referenced in function _key_callback
+wm.obj : error LNK2019: unresolved external symbol _glfwGetFramebufferSize referenced in function _wm_init
+wm.obj : error LNK2019: unresolved external symbol _glfwSetFramebufferSizeCallback referenced in function _wm_init
+wm.obj : error LNK2019: unresolved external symbol _glfwPollEvents referenced in function _wm_update
+wm.obj : error LNK2019: unresolved external symbol _glfwSetKeyCallback referenced in function _wm_init
+wm.obj : error LNK2019: unresolved external symbol _glfwMakeContextCurrent referenced in function _wm_init
+wm.obj : error LNK2019: unresolved external symbol _glfwSwapBuffers referenced in function _wm_update
+wm.obj : error LNK2019: unresolved external symbol _glfwSwapInterval referenced in function _wm_init
+wm.obj : error LNK2019: unresolved external symbol _gluErrorString referenced in function _wm_init_texture
+C:\Users\queegins\Documents\code\vc-CHIP-8\lib\glfw3.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\queegins\Documents\code\vc-CHIP-8\Debug\vc-CHIP-8.exe : fatal error LNK1120: 16 unresolved externals
