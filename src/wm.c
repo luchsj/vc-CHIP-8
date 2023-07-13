@@ -141,12 +141,7 @@ void init_gl(wm_t* wm)
 
 	// Enable debug messages
 	glEnable(GL_DEBUG_OUTPUT);
-<<<<<<< HEAD
-	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-	glDebugMessageCallback(render_error_callback, NULL);
-=======
 	glDebugMessageCallback((GLDEBUGPROC) render_error_callback, NULL);
->>>>>>> 4598bcc22c70fd8a82a996eec6156d63287bc91a
 	
 	// Generate vertex buffers
 	glGenBuffers(1, &wm->vertex_buffer);
