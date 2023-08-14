@@ -5,12 +5,10 @@
 #include "wm.h"
 
 // GL
-//#define GLEW_STATIC // Required for Windows executable
-#include <GL/glew.h>
-
-#include "cglm/cam.h"
-#include "cglm/mat4.h"
-#include "cglm/quat.h"
+#include "../include/glad.h"
+#include <cglm/cam.h>
+#include <cglm/mat4.h>
+#include <cglm/quat.h>
 #include <GLFW/glfw3.h>
 
 // Temp shaders
@@ -105,7 +103,7 @@ void init_gl(wm_t* wm)
 	// Just need to create a quad that fills the screen.
 	GLenum err;
 
-	glGenBuffers(1, &wm->vertex_buffer);
+	glGenBuffers(1, wm->vertex_buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, &wm->vertex_buffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
@@ -127,7 +125,7 @@ void init_gl(wm_t* wm)
 	if(err != GL_NO_ERROR)
 	{
 		fprintf(stderr, "WM: GL shader init failure: %s\n", gluErrorString(err));
-		return NULL;
+		return;
 	}
 	wm->mvp_location = glGetUniformLocation(wm->program, "MVP");
 	wm->vpos_location = glGetAttribLocation(wm->program, "vPos");
@@ -145,7 +143,7 @@ void init_gl(wm_t* wm)
 	if(err != GL_NO_ERROR)
 	{
 		fprintf(stderr, "WM: GL init failure: %s\n", gluErrorString(err));
-		return NULL;
+		return;
 	}
 }
 
@@ -179,18 +177,6 @@ wm_t* wm_init()
 	glfwMakeContextCurrent(wm->window);
 	glfwSetErrorCallback(error_callback);
 
-	// Initialize GLEW
-	GLenum err = glewInit();
-	if(err != GLEW_OK)
-	{
-		fprintf(stderr, "WM: GLEW init failure: %s\n", glewGetErrorString(err));
-		return NULL;
-	}
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-
-	//fprintf(stdout, "WM: GLEW %s init success\n", glewGetString(GLEW_VERSION));
-
 	// Set GLFW values
 	glfwSwapInterval(1);
 	glfwSetKeyCallback(wm->window, key_callback);
@@ -203,7 +189,7 @@ wm_t* wm_init()
 	init_gl(wm);
 	//wm_init_texture(wm, NULL, );
 
-	err = glGetError();
+	GLuint err = glGetError();
 	if(err != GL_NO_ERROR)
 	{
 		fprintf(stderr, "WM: WM init failure: %s\n", gluErrorString(err));

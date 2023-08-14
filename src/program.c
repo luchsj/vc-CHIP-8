@@ -5,9 +5,12 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
 
-#define WIN32_LEAN_AND_MEAN
+//#define WIN32_LEAN_AND_MEAN
+#ifdef WIN32_LEAN_AND_MEAN
 #include <Windows.h>
+#endif
 
 // Built-in font
 typedef struct program_t
@@ -65,13 +68,23 @@ program_t* program_init(char* file_path)
 
 		}
 	}
-
+#ifdef WIN32_LEAN_AND_MEAN
 	memcpy_s(program->memory + 0x050, sizeof(uint8_t) * (4096 - 0x050), font, sizeof(font));
-
+#endif
+	memcpy(program->memory + 0x050, font, sizeof(font));
+	
 	program->pc = 0x200;
 
-	// Load program
-	// We're only loading one file at a time during runtime
+	return program;
+}
+
+// Takes the local/absolute path of a file and a location in memory to read the file into.
+// Writes the content of the file to the given location in memory.
+// Returns the number of bytes read before EOF.
+// If the read operation fails, the program will return a negative int.
+int program_open_file(char* file_path, void* out_mem, int max_length)
+{
+#ifdef WIN32_LEAN_AND_MEAN
 	HANDLE program_file;
 	if (file_path)
 	{
@@ -111,8 +124,8 @@ program_t* program_init(char* file_path)
 	{
 		//fprintf(stderr, "Program: file read failed: %s\n", error);
 	}
-
-	return program;
+#endif
+	return -1;
 }
 
 // Returns an array of floats representing the current state of the display.
