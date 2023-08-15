@@ -26,11 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-<<<<<<< HEAD
 #include "../include/glad.h"
-=======
-#include <glad/glad.h>
->>>>>>> origin/gl-cleanup
 
 static void* get_proc(const char *namez);
 

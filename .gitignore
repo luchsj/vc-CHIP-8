@@ -1,5 +1,7 @@
 # Build folder
 ./build
+./build/*
+./bin
 
 # Visual Studio files
 *.vcxproj*

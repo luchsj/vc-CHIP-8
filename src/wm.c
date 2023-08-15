@@ -326,13 +326,6 @@ void wm_init_texture(wm_t* wm, float* tex_data, int h, int w)
 
 	//*id = texture;
 	glGenerateMipmap(GL_TEXTURE_2D);
-
-	GLenum err = glGetError();
-	if(err != GL_NO_ERROR)
-	{
-		fprintf(stderr, "WM: Texture init failure: %s\n", gluErrorString(err));
-		return;
-	}
 }
 
 // TODO: function which replaces the texture at an existing ID

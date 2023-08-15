@@ -1,1 +1,0 @@
-/usr/bin/cc "CMakeFiles/vc-CHIP-8.dir/src/glad.c.o" "CMakeFiles/vc-CHIP-8.dir/src/main.c.o" "CMakeFiles/vc-CHIP-8.dir/src/program.c.o" "CMakeFiles/vc-CHIP-8.dir/src/wm.c.o" -o vc-CHIP-8  -Wl,-rpath,/home/queegins/Documents/code/vc-CHIP-8/build/lib/cglm lib/cglm/libcglm.so.0.9.1 lib/glfw/src/libglfw3.a /usr/lib/librt.a -lm -ldl 
