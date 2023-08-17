@@ -5,9 +5,12 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
 
-#define WIN32_LEAN_AND_MEAN
+//#define WIN32_LEAN_AND_MEAN
+#ifdef WIN32_LEAN_AND_MEAN
 #include <Windows.h>
+#endif
 
 // Built-in font
 typedef struct program_t
@@ -20,7 +23,59 @@ typedef struct program_t
 	uint8_t delay_timer;  // Decrements every frame (60fps) (independent of fetch/decode/exec loop)
 	uint8_t sound_timer;  // Behaves like delay timer but beeps while above 0
 	uint8_t vars[16];	  // Labeled V0 through VF
+	bool prog_loaded;     // Indicates whether or not a program is actually loaded
 } program_t;
+
+// Asks the system for the given file and writes the data to program memory.
+bool program_open_rom_to_mem(char* file_path, void** ram)
+{
+#ifdef WIN32_LEAN_AND_MEAN
+	HANDLE program_file;
+	if (file_path)
+	{
+		wchar_t wide_path[1024];
+		if (MultiByteToWideChar(CP_UTF8, 0, file_path, -1, wide_path, sizeof(wide_path)) <= 0)
+		{
+			fprintf(stderr, "PROGRAM: File read failed, failure parsing file path\n");
+			return false;
+		}
+		program_file = CreateFile(wide_path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		if (program_file == INVALID_HANDLE_VALUE)
+		{
+			char* error;
+			switch (GetLastError())
+			{
+				case ERROR_FILE_NOT_FOUND:
+					error = "couldn't find file at given path";
+					break;
+				default:
+					error = "undefined error";
+					break;
+			}
+
+			fprintf(stderr, "PROGRAM: file read failed: %s\n", error);
+		}
+	}
+	else
+	{
+		fprintf(stderr, "Program: failed to initialize, file path is NULL");
+		return false;
+	}
+
+	PLARGE_INTEGER file_size = 0;
+	GetFileSizeEx(program_file, &file_size);
+
+	
+	//program->memory + 0x200
+	if (!ReadFile(program_file, ram, file_size, NULL, NULL))
+	{
+		//fprintf(stderr, "Program: file read failed: %s\n", error);
+	}
+#endif
+
+	// Return false on read failure
+	return false;
+}
 
 // Opens program file and intializes CHIP-8 program.
 program_t* program_init(char* file_path)
@@ -65,13 +120,23 @@ program_t* program_init(char* file_path)
 
 		}
 	}
-
+#ifdef WIN32_LEAN_AND_MEAN
 	memcpy_s(program->memory + 0x050, sizeof(uint8_t) * (4096 - 0x050), font, sizeof(font));
-
+#endif
+	memcpy(program->memory + 0x050, font, sizeof(font));
+	
 	program->pc = 0x200;
 
-	// Load program
-	// We're only loading one file at a time during runtime
+	return program;
+}
+
+// Takes the local/absolute path of a file and a location in memory to read the file into.
+// Writes the content of the file to the given location in memory.
+// Returns the number of bytes read before EOF.
+// If the read operation fails, the program will return a negative int.
+int program_open_file(char* file_path, void* out_mem, int max_length)
+{
+#ifdef WIN32_LEAN_AND_MEAN
 	HANDLE program_file;
 	if (file_path)
 	{
@@ -111,8 +176,8 @@ program_t* program_init(char* file_path)
 	{
 		//fprintf(stderr, "Program: file read failed: %s\n", error);
 	}
-
-	return program;
+#endif
+	return -1;
 }
 
 // Returns an array of floats representing the current state of the display.
@@ -152,6 +217,10 @@ float* program_display_to_rgb(program_t* program)
 void program_update(program_t* program)
 {
 	// TODO: timing w/ user-definable speed
+
+	// Make sure there's actually a program running
+	if (!program->prog_loaded)
+		return;
 
 	// Fetch
 	uint16_t instruction = *(program->memory + program->pc) << 8;

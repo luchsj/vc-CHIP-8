@@ -1,4 +1,14 @@
+# Build folder
+./build
+./build/*
+./bin
+
+# Visual Studio files
+*.vcxproj*
+*.sln
 .vs/
 x64/
+
+# Exclude CHIP-8 ROM files
 roms/
 
