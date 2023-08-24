@@ -243,7 +243,8 @@ wm_t* wm_init()
 	glfwSetErrorCallback(glfw_error_callback);
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	glfwWindowHintString(GLFW_X11_CLASS_NAME, "vc-CHIP-8");
 
 	//fprintf(stdout, "WM: GLEW %s init success\n", glewGetString(GLEW_VERSION));
 
