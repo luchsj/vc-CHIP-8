@@ -7,7 +7,7 @@
 #define CIMGUI_USE_GLFW
 
 #include "../lib/cimgui/cimgui.h"
-#include "../lib/cimgui/generator/output/cimgui_impl.h"
+//#include "../lib/cimgui/generator/output/cimgui_impl.h"
 
 #include "ui.h"
 
